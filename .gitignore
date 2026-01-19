@@ -1,0 +1,22 @@
+# Build directories
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled files
+*.o
+*.a
+*.so
+*.dll
+*.exe
+
+# Data files
+data/
+*.log
+*.bin
+sample/

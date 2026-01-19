@@ -1,0 +1,40 @@
+name: Build and test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build-and-test:
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Install CMake and Ninja
+      uses: lukka/get-cmake@latest
+
+    - name: Setup MSVC
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+
+    - name: Setup CPM cache
+      uses: actions/cache@v5
+      with:
+        path: ~/build/cpm_modules
+        key: ${{ runner.os }}-cpm-${{ hashFiles('**/') }}
+        restore-keys: |
+          ${{ runner.os }}-cpm-
+
+    - name: Configure CMake
+      run: cmake --preset release
+      
+    - name: Build
+      run: cmake --build --preset release
+      
+    - name: Run tests
+      run: ctest --preset release --output-on-failure

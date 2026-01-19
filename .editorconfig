@@ -1,0 +1,13 @@
+root = true
+
+[*.{h,cpp}]
+charset = utf-8
+tab_width = 4
+indent_style = tab
+trim_trailing_whitespace = true
+
+[{CMakeLists.txt,*.cmake}]
+charset = utf-8
+tab_width = 4
+indent_style = tab
+trim_trailing_whitespace = true
