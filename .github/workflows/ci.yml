@@ -30,6 +30,12 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-cpm-
 
+    - name: Install liburing
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt update
+        sudo apt install -y liburing-dev
+
     - name: Configure CMake
       run: cmake --preset release
       
