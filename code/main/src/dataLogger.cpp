@@ -6,6 +6,7 @@
 // Project headers
 #include <analyzer/sbgEComAnalyzer.h>
 #include <common/nmea.h>
+#include <interfaces/fileInterface.h>
 #include <interfaces/udpInterface.h>
 #include <ntrip/ntripClient.h>
 
@@ -63,10 +64,16 @@ void CDataLogger::run()
 
 	if (m_deviceSlot)
 	{
-		m_deviceSlot->start([this](const auto &data)
-		                    { onDeviceDataReceived(data); },
-		                    [this](const auto &errorCode)
-		                    { onCriticalError(errorCode); });
+		auto deviceStartErrorCode = m_deviceSlot->start([this](const auto &data)
+		                                                { onDeviceDataReceived(data); },
+		                                                [this](const auto &errorCode)
+		                                                { onCriticalError(errorCode); });
+
+		if (deviceStartErrorCode)
+		{
+			spdlog::error("Failed to start slot : {}", deviceStartErrorCode.message());
+			return;
+		}
 
 		if (m_deviceLogger)
 		{
@@ -138,6 +145,11 @@ std::error_code CDataLogger::initializeSlot(const SSlotConfig &slotConfig, const
 	{
 		spdlog::info("=== UDP ===");
 		m_deviceSlot = std::make_unique<CUdpInterface>(m_ioc, slotConfig.deviceConfig.get<SUdpConfig>());
+	}
+	else if (slotConfig.deviceConfig.is<SFileConfig>())
+	{
+		spdlog::info("=== File ===");
+		m_deviceSlot = std::make_unique<CFileInterface>(m_ioc, slotConfig.deviceConfig.get<SFileConfig>());
 	}
 	else
 	{

@@ -64,6 +64,16 @@ namespace sbg::advlogger
 		std::string flowControl = "none";// "none", "hardware", "software"
 	};
 
+	struct SFileConfig
+	{
+		std::filesystem::path     path;
+		bool                      isText             = false;
+		bool                      textChunkToNewLine = false;
+		uint32_t                  chunkSize          = 0;
+		std::chrono::milliseconds sendingInterval    = std::chrono::milliseconds{1000};
+		bool                      loop               = false;
+	};
+
 	struct SNtripConfig
 	{
 		std::string          host;
@@ -88,9 +98,9 @@ namespace sbg::advlogger
 
 	struct SSlotConfig
 	{
-		VariantConfigHelper<STcpConfig, SUdpConfig, SSerialConfig> deviceConfig;
-		std::optional<SOutputFileConfig>                           outputFile          = std::nullopt;
-		bool                                                       enableRtcmForwarder = false;
+		VariantConfigHelper<STcpConfig, SUdpConfig, SSerialConfig, SFileConfig> deviceConfig;
+		std::optional<SOutputFileConfig>                                        outputFile          = std::nullopt;
+		bool                                                                    enableRtcmForwarder = false;
 	};
 
 	struct SRtcmConfig
@@ -112,5 +122,4 @@ namespace sbg::advlogger
          */
 		static CConfig loadFromJsonFile(const std::filesystem::path &jsonFilePath);
 	};
-
 }// namespace sbg::advlogger

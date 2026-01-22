@@ -44,6 +44,29 @@ namespace
 		return value.contains("port") && value.contains("baudRate");
 	}
 
+	SFileConfig getFileConfigFromJson(const nlohmann::json &value)
+	{
+		SFileConfig fileConfig;
+
+		fileConfig.path               = value.at("path").get<std::string>();
+		fileConfig.isText             = value.contains("isText") ? value.at("isText").get<bool>() : false;
+		fileConfig.textChunkToNewLine = value.contains("textChunkToNewLine") ? value.at("textChunkToNewLine").get<bool>() : false;
+		fileConfig.chunkSize          = value.contains("chunkSize") ? value.at("chunkSize").get<uint32_t>() : 0;
+		fileConfig.loop               = value.contains("loop") ? value.at("loop").get<bool>() : false;
+
+		if (value.contains("sendingInterval"))
+		{
+			fileConfig.sendingInterval = std::chrono::milliseconds(value.at("sendingInterval").get<uint32_t>());
+		}
+
+		return fileConfig;
+	}
+
+	bool hasFileConfig(const nlohmann::json &value)
+	{
+		return value.contains("path");
+	}
+
 	SNtripConfig getNtripConfigFromJson(const nlohmann::json &value)
 	{
 		SNtripConfig ntripConfig;
@@ -77,7 +100,7 @@ namespace
 		return value.contains("latitude") && value.contains("longitude");
 	}
 
-	std::variant<STcpConfig, SUdpConfig, SSerialConfig> getDeviceConfigFromJson(const nlohmann::json &value)
+	std::variant<STcpConfig, SUdpConfig, SSerialConfig, SFileConfig> getDeviceConfigFromJson(const nlohmann::json &value)
 	{
 		if (hasTcpConfig(value))
 		{
@@ -90,6 +113,10 @@ namespace
 		if (hasSerialConfig(value))
 		{
 			return getSerialConfigFromJson(value);
+		}
+		if (hasFileConfig(value))
+		{
+			return getFileConfigFromJson(value);
 		}
 		throw std::runtime_error("Invalid device config");
 	}

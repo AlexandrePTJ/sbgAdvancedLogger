@@ -7,51 +7,54 @@ using namespace sbg::advlogger;
 //---------------------------------------------------------------------//
 //- Static helpers                                                    -//
 //---------------------------------------------------------------------//
-static asio::serial_port::parity::type getParityFromString(const std::string &str)
+namespace
 {
-	if (str == "none")
+	asio::serial_port::parity::type getParityFromString(const std::string &str)
 	{
-		return asio::serial_port::parity::none;
+		if (str == "none")
+		{
+			return asio::serial_port::parity::none;
+		}
+		if (str == "odd")
+		{
+			return asio::serial_port_base::parity::odd;
+		}
+		if (str == "even")
+		{
+			return asio::serial_port_base::parity::even;
+		}
+		throw std::runtime_error("Invalid parity");
 	}
-	if (str == "odd")
-	{
-		return asio::serial_port_base::parity::odd;
-	}
-	if (str == "even")
-	{
-		return asio::serial_port_base::parity::even;
-	}
-	throw std::runtime_error("Invalid parity");
-}
 
-static asio::serial_port::stop_bits::type getStopBitsFromString(const std::string &str)
-{
-	if (str == "one")
+	asio::serial_port::stop_bits::type getStopBitsFromString(const std::string &str)
 	{
-		return asio::serial_port::stop_bits::one;
+		if (str == "one")
+		{
+			return asio::serial_port::stop_bits::one;
+		}
+		if (str == "two")
+		{
+			return asio::serial_port::stop_bits::two;
+		}
+		throw std::runtime_error("Invalid stop bits");
 	}
-	if (str == "two")
-	{
-		return asio::serial_port::stop_bits::two;
-	}
-	throw std::runtime_error("Invalid stop bits");
-}
 
-static asio::serial_port::flow_control::type getFlowControlFromString(const std::string &str)
-{
-	if (str == "none")
+	asio::serial_port::flow_control::type getFlowControlFromString(const std::string &str)
 	{
-		return asio::serial_port::flow_control::none;
+		if (str == "none")
+		{
+			return asio::serial_port::flow_control::none;
+		}
+		if (str == "hardware")
+		{
+			return asio::serial_port::flow_control::hardware;
+		}
+		if (str == "software")
+		{
+			return asio::serial_port::flow_control::software;
+		}
+		throw std::runtime_error("Invalid flow control");
 	}
-	if (str == "hardware")
-	{
-		return asio::serial_port::flow_control::hardware;
-	}
-	if (str == "software")
-	{
-		return asio::serial_port::flow_control::software;
-	}
-	throw std::runtime_error("Invalid flow control");
 }
 
 //---------------------------------------------------------------------//
@@ -106,8 +109,7 @@ void CSerialInterface::stop()
 {
 	if (m_isActive)
 	{
-		std::error_code ec;
-		m_serialPort.close(ec);
+		m_serialPort.close();
 		m_isActive = false;
 		spdlog::info("Serial port closed");
 	}

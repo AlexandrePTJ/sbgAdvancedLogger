@@ -11,18 +11,12 @@ set(SRCS
         src/config/config.cpp
         src/file/bufferedWriter.cpp
         src/interfaces/abstractInterface.cpp
+        src/interfaces/fileInterface.cpp
         src/interfaces/serialInterface.cpp
         src/interfaces/tcpInterface.cpp
         src/interfaces/udpInterface.cpp
         src/ntrip/ntripClient.cpp
         src/dataLogger.cpp
-        #        src/device/serial_source.cpp
-        #        src/device/tcp_source.cpp
-        #        src/device/udp_source.cpp
-        #        src/file/buffered_writer.cpp
-        #        src/file/file_rotator.cpp
-        #        src/ntrip/ntrip_client.cpp
-        #        src/ntrip/rtcm_forwarder.cpp
 )
 
 set(HDRS
@@ -36,18 +30,12 @@ set(HDRS
         src/config/config.h
         src/file/bufferedWriter.h
         src/interfaces/abstractInterface.h
+        src/interfaces/fileInterface.h
         src/interfaces/serialInterface.h
         src/interfaces/tcpInterface.h
         src/interfaces/udpInterface.h
         src/ntrip/ntripClient.h
         src/dataLogger.h
-        #        src/device/serial_source.h
-        #        src/device/tcp_source.h
-        #        src/device/udp_source.h
-        #        src/file/buffered_writer.h
-        #        src/file/file_rotator.h
-        #        src/ntrip/ntrip_client.h
-        #        src/ntrip/rtcm_forwarder.h
 )
 
 
