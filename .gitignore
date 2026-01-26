@@ -17,7 +17,10 @@ build/
 
 # Data files
 data/
-!code/tests/data
 *.log
 *.bin
 sample/
+
+# Test files - exceptions
+!code/tests/data
+!code/tests/data/*.bin
