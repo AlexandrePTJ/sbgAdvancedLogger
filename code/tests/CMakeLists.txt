@@ -11,12 +11,15 @@ target_sources(${PROJECT_NAME} PRIVATE
         ${TEST_HELPERS_SRCS}
         src/common/tcpConnectionTests.cpp
         src/common/utilsTests.cpp
+        src/interfaces/fileInterfaceTests.cpp
         src/ntrip/ntripClientTests.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/testHelpers
 )
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE TESTS_DATA_DIR_PATH="${CMAKE_CURRENT_SOURCE_DIR}/data")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE sbgAdvancedLoggerObj Catch2::Catch2WithMain)
 

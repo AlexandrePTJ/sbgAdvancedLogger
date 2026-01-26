@@ -35,7 +35,8 @@ namespace sbg::advlogger
 		//- Internal operations                                               -//
 		//---------------------------------------------------------------------//
 		void scheduleRead();
-		void doRead();
+		void doReadLine();
+		void doReadChunk();
 
 		//---------------------------------------------------------------------//
 		//- Internal data                                                     -//
@@ -48,6 +49,10 @@ namespace sbg::advlogger
 		asio::steady_timer                 m_readTimer;
 		std::atomic<bool>                  m_isRunning;
 		std::unique_ptr<asio::stream_file> m_file;
+		asio::streambuf                    m_lineBuffer;
+
+		using ReadFunction = std::function<void()>;
+		ReadFunction m_readFunc;
 	};
 
 }// namespace sbg::advlogger

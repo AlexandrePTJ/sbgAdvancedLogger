@@ -17,6 +17,7 @@ build/
 
 # Data files
 data/
+!code/tests/data
 *.log
 *.bin
 sample/
